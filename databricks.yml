@@ -1,0 +1,68 @@
+bundle:
+  name: news-monitoring
+
+include:
+  - resources/*.yml
+
+variables:
+  warehouse_id:
+    description: The SQL warehouse ID to use for queries
+    default: ""
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: ${DATABRICKS_HOST}
+
+  staging:
+    mode: development
+    workspace:
+      host: ${DATABRICKS_HOST}
+
+  prod:
+    mode: production
+    workspace:
+      host: ${DATABRICKS_HOST}
+    run_as:
+      service_principal_name: ${SP_NAME}
+
+resources:
+  jobs:
+    news_ingestion_daily:
+      name: "[${bundle.target}] News Ingestion Daily"
+      job_clusters:
+        - job_cluster_key: main_cluster
+          new_cluster:
+            spark_version: 13.3.x-scala2.12
+            node_type_id: i3.xlarge
+            num_workers: 2
+            aws_attributes:
+              availability: SPOT
+      tasks:
+        - task_key: ingest_startup_news
+          job_cluster_key: main_cluster
+          notebook_task:
+            notebook_path: ./notebooks/ingestion/startup_news.py
+            base_parameters:
+              env: ${bundle.target}
+        - task_key: ingest_vc_pe_news
+          job_cluster_key: main_cluster
+          depends_on:
+            - task_key: ingest_startup_news
+          notebook_task:
+            notebook_path: ./notebooks/ingestion/vc_pe_news.py
+            base_parameters:
+              env: ${bundle.target}
+        - task_key: ingest_job_market
+          job_cluster_key: main_cluster
+          depends_on:
+            - task_key: ingest_startup_news
+          notebook_task:
+            notebook_path: ./notebooks/ingestion/job_market.py
+            base_parameters:
+              env: ${bundle.target}
+      schedule:
+        quartz_cron_expression: "0 0 2 * * ?"
+        timezone_id: "UTC"
