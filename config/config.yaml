@@ -37,10 +37,35 @@ data_sources:
     - name: rss_feeds
       enabled: true
       feeds:
+        # Global Startup News
         - url: https://techcrunch.com/feed/
+          name: techcrunch
           category: startup
-        - url: https://www.pitchbook.com/news/rss/all
+          region: global
+          requires_user_agent: false
+
+        # VC/PE Deals
+        - url: https://news.crunchbase.com/feed/
+          name: crunchbase_news
           category: vc-pe
+          region: global
+          requires_user_agent: false
+
+        # Europe (Germany, Switzerland)
+        - url: https://tech.eu/feed/
+          name: tech_eu
+          category: startup
+          region: europe
+          countries: [DE, CH, AT, EU]
+          requires_user_agent: false
+
+        # Southeast Asia
+        - url: https://www.techinasia.com/feed
+          name: tech_in_asia
+          category: startup
+          region: sea
+          countries: [SG, MY, ID, TH, VN, PH]
+          requires_user_agent: true
 
   job_boards:
     - name: linkedin
