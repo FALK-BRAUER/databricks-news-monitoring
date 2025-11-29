@@ -1,217 +1,101 @@
-# Databricks News Monitoring
+# 📰 News Monitoring & Startup Intelligence Platform
 
-A comprehensive Databricks-based platform for monitoring and analyzing news about startups, scaleups, PE/VC activity, and job market trends.
+An automated data pipeline for monitoring startup news, funding rounds, acquisitions, and job market trends across Southeast Asia, Europe, and global markets.
 
-## Overview
+## 🎯 What This Does
 
-This project provides automated data pipelines to:
-- Collect news from multiple sources (APIs, RSS feeds, web scraping)
-- Monitor startup and scaleup company news
-- Track Private Equity and Venture Capital activity
-- Analyze job market trends in the startup ecosystem
-- Store and process data using Delta Lake
-- Generate insights and reports
+Automatically collects, enriches, and analyzes news from multiple sources to track:
+- 💰 Funding rounds (Seed, Series A/B/C, etc.)
+- 🤝 Acquisitions and M&A activity  
+- 📈 Startup activity by region
+- 💼 Hiring and layoff trends
+- 🏢 Company mentions and trending startups
 
-## Project Structure
+## 🏗️ Architecture
+
+### Medallion Architecture (Bronze → Silver → Gold)
 
 ```
-databricks-news-monitoring/
-├── notebooks/               # Databricks notebooks
-│   ├── ingestion/          # Data ingestion notebooks
-│   ├── transformation/     # Data transformation logic
-│   └── analysis/           # Analysis and reporting
-├── src/                    # Python source code
-│   ├── utils/              # Utility functions
-│   └── data_sources/       # Data source connectors
-├── config/                 # Configuration files
-│   └── config.yaml         # Main configuration
-├── tests/                  # Unit tests
-├── data/                   # Local data (gitignored)
-│   ├── raw/                # Raw data
-│   └── processed/          # Processed data
-├── databricks.yml          # Databricks Asset Bundle config
-└── requirements.txt        # Python dependencies
+RSS Feeds (4 sources)
+    ↓
+📊 BRONZE: Raw news articles
+    ↓ (Entity Extraction & Categorization)
+🔧 SILVER: Enriched articles with extracted entities
+    ↓ (Aggregation & Analytics)
+💎 GOLD: Analytics-ready business views
+    ↓
+📈 Dashboards & Alerts
 ```
 
-## Prerequisites
+## 📊 Current Status
 
-- Databricks workspace (AWS/Azure/GCP)
-- AWS account with:
-  - S3 bucket for data storage
-  - Secrets Manager for API keys
-- Python 3.9+
-- Databricks CLI
+✅ **Production Ready**
 
-## Setup
+- Bronze layer collecting ~100 articles/day
+- Silver layer extracting entities and categorizing
+- Gold layer with 5 analytics tables
+- Complete ETL pipeline running daily at 3:00 AM UTC
+- 12 pre-built SQL queries for dashboards
 
-### 1. Clone the Repository
+## 🚀 Quick Start
 
-```bash
-git clone https://github.com/FALK-BRAUER/databricks-news-monitoring.git
-cd databricks-news-monitoring
+View your data in Databricks SQL:
+
+```sql
+-- Recent funding rounds
+SELECT title, funding_round, funding_amount_millions, region
+FROM workspace.news_monitoring.gold_funding_tracker
+ORDER BY published_date DESC
+LIMIT 10;
+
+-- Regional overview
+SELECT * FROM workspace.news_monitoring.gold_regional_trends;
 ```
 
-### 2. Install Dependencies
+See `sql/dashboard_queries.sql` for all 12 queries.
 
-```bash
-pip install -r requirements.txt
-```
+## 📈 Dashboard
 
-### 3. Set Up Environment Variables
+Access pre-built queries in `sql/dashboard_queries.sql` for:
+- Regional activity overview
+- Recent funding rounds
+- Top mentioned companies
+- Category analysis
+- Hiring vs layoffs trends
 
-Copy the example environment file and fill in your values:
+## 🔧 Workflows
 
-```bash
-cp .env.example .env
-# Edit .env with your actual credentials
-```
+**Complete ETL Pipeline (Active)**
+- Job ID: 82343254902219
+- Schedule: Daily at 3:00 AM UTC
+- URL: https://dbc-5a365369-15d1.cloud.databricks.com/#job/82343254902219
 
-The `.env` file is gitignored and contains:
-- Databricks API key
-- AWS configuration
-- S3 bucket settings
-- Email for alerts
+**Tasks:**
+1. Bronze: Ingest RSS feeds
+2. Silver: Extract entities & categorize
+3. Gold: Create analytics tables
 
-### 4. Configure AWS Credentials
+## 📊 Data Tables
 
-Ensure your AWS credentials are configured:
+All tables in `workspace.news_monitoring`:
 
-```bash
-aws configure
-```
+**Bronze:**
+- `raw_news_articles` - Raw RSS data
 
-### 5. Set Up Databricks
+**Silver:**
+- `silver_articles` - Enriched articles with entities
 
-Install Databricks CLI:
+**Gold:**
+- `gold_daily_activity` - Daily metrics
+- `gold_funding_tracker` - Funding announcements
+- `gold_regional_trends` - Regional stats
+- `gold_company_mentions` - Company tracking
+- `gold_category_analysis` - Category breakdown
 
-```bash
-databricks configure
-```
+## 📧 Alerts
 
-### 6. Configure Secrets
+Email notifications to falk.brauer@me.com on workflow failures.
 
-API keys and credentials are stored in AWS Secrets Manager (ap-southeast-1):
-- Secret name: `AWS`
-- Keys: `GITHUB`, `DATABRICKS_API_KEY`, `CLAUDE`, `GEMINI`, etc.
+---
 
-### 7. Deploy to Databricks
-
-Using Databricks Asset Bundles:
-
-```bash
-# Validate the bundle
-databricks bundle validate
-
-# Deploy to development
-databricks bundle deploy -t dev
-
-# Deploy to production
-databricks bundle deploy -t prod
-```
-
-## Configuration
-
-Edit `config/config.yaml` to customize:
-
-- **Data sources**: Enable/disable news APIs, RSS feeds, job boards
-- **AWS settings**: S3 bucket, region, secrets
-- **Delta tables**: Catalog, schema, table names
-- **Processing**: Batch size, lookback period, deduplication
-
-## Data Sources
-
-### News APIs
-- NewsAPI
-- GNews
-- RSS Feeds (TechCrunch, PitchBook)
-
-### Job Boards
-- LinkedIn (planned)
-- AngelList (planned)
-
-### Company Databases
-- Crunchbase (planned)
-- PitchBook (planned)
-
-## Delta Lake Schema
-
-### Tables
-
-1. **raw_news_articles**: Raw news data from all sources
-2. **processed_news_articles**: Cleaned and enriched news articles
-3. **vc_pe_deals**: Venture capital and private equity deals
-4. **job_postings**: Job market data
-
-## Workflows
-
-### Daily News Ingestion
-
-Runs daily at 2:00 AM UTC:
-
-1. Ingest startup news
-2. Ingest VC/PE news
-3. Ingest job market data
-
-Configured in `databricks.yml`
-
-## Development
-
-### Local Testing
-
-```bash
-# Run tests
-pytest tests/
-
-# Code formatting
-black src/ notebooks/
-
-# Linting
-flake8 src/
-```
-
-### Adding New Data Sources
-
-1. Create a new module in `src/data_sources/`
-2. Implement the connector class
-3. Add configuration to `config/config.yaml`
-4. Create corresponding notebook in `notebooks/ingestion/`
-
-## Monitoring & Alerts
-
-- Email alerts: falk.brauer@me.com
-- Slack webhooks: (to be configured)
-- Databricks job notifications
-
-## Security
-
-- **Never commit secrets**: All credentials in AWS Secrets Manager
-- **Use IAM roles**: For Databricks cluster access to AWS
-- **Network security**: Configure VPC and security groups appropriately
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Run tests and linting
-4. Submit a pull request
-
-## License
-
-Private repository - All rights reserved
-
-## Contact
-
-**Falk Brauer**
-- Email: falk.brauer@me.com
-- GitHub: [@FALK-BRAUER](https://github.com/FALK-BRAUER)
-
-## Roadmap
-
-- [ ] Implement RSS feed ingestion
-- [ ] Add NewsAPI integration
-- [ ] Integrate LinkedIn job scraping
-- [ ] Add Crunchbase API connector
-- [ ] Build analysis dashboards
-- [ ] Implement real-time streaming
-- [ ] Add NLP sentiment analysis
-- [ ] Create automated reporting
+For full documentation, see `README_OLD.md` or check `WORKFLOW_MANAGEMENT.md`

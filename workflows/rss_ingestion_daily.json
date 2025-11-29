@@ -30,7 +30,7 @@
       "task_key": "ingest_rss_feeds",
       "description": "Fetch news articles from RSS feeds and write to Delta Lake",
       "notebook_task": {
-        "notebook_path": "/Users/flk.brauer@gmail.com/news-monitoring/rss_feeds",
+        "notebook_path": "/Users/flk.brauer@gmail.com/news-monitoring/rss_feeds.py",
         "source": "WORKSPACE"
       },
       "job_cluster_key": "news_ingestion_cluster",

@@ -1,7 +1,9 @@
 {
   "name": "News Monitoring - Daily RSS Ingestion",
   "email_notifications": {
-    "on_failure": ["falk.brauer@me.com"]
+    "on_failure": [
+      "falk.brauer@me.com"
+    ]
   },
   "timeout_seconds": 0,
   "max_concurrent_runs": 1,
@@ -10,7 +12,7 @@
       "task_key": "ingest_rss_feeds",
       "description": "Fetch news articles from RSS feeds and write to Delta Lake",
       "notebook_task": {
-        "notebook_path": "/Users/flk.brauer@gmail.com/news-monitoring/rss_feeds",
+        "notebook_path": "/Users/flk.brauer@gmail.com/news-monitoring/rss_feeds.py",
         "source": "WORKSPACE"
       },
       "timeout_seconds": 0
