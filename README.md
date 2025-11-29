@@ -57,7 +57,22 @@ cd databricks-news-monitoring
 pip install -r requirements.txt
 ```
 
-### 3. Configure AWS Credentials
+### 3. Set Up Environment Variables
+
+Copy the example environment file and fill in your values:
+
+```bash
+cp .env.example .env
+# Edit .env with your actual credentials
+```
+
+The `.env` file is gitignored and contains:
+- Databricks API key
+- AWS configuration
+- S3 bucket settings
+- Email for alerts
+
+### 4. Configure AWS Credentials
 
 Ensure your AWS credentials are configured:
 
@@ -65,7 +80,7 @@ Ensure your AWS credentials are configured:
 aws configure
 ```
 
-### 4. Set Up Databricks
+### 5. Set Up Databricks
 
 Install Databricks CLI:
 
@@ -73,13 +88,13 @@ Install Databricks CLI:
 databricks configure
 ```
 
-### 5. Configure Secrets
+### 6. Configure Secrets
 
 API keys and credentials are stored in AWS Secrets Manager (ap-southeast-1):
 - Secret name: `AWS`
-- Keys: `GITHUB`, `CLAUDE`, `GEMINI`, etc.
+- Keys: `GITHUB`, `DATABRICKS_API_KEY`, `CLAUDE`, `GEMINI`, etc.
 
-### 6. Deploy to Databricks
+### 7. Deploy to Databricks
 
 Using Databricks Asset Bundles:
 
