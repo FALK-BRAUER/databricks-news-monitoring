@@ -1,0 +1,56 @@
+{
+  "name": "News Monitoring - Daily RSS Ingestion",
+  "email_notifications": {
+    "on_failure": ["falk.brauer@me.com"],
+    "on_success": [],
+    "no_alert_for_skipped_runs": false
+  },
+  "webhook_notifications": {},
+  "timeout_seconds": 0,
+  "max_concurrent_runs": 1,
+  "job_clusters": [
+    {
+      "job_cluster_key": "news_ingestion_cluster",
+      "new_cluster": {
+        "spark_version": "auto:latest-lts",
+        "node_type_id": "Standard_D3_v2",
+        "num_workers": 0,
+        "spark_conf": {
+          "spark.databricks.delta.preview.enabled": "true"
+        },
+        "custom_tags": {
+          "project": "news-monitoring"
+        },
+        "enable_local_disk_encryption": false
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "task_key": "ingest_rss_feeds",
+      "description": "Fetch news articles from RSS feeds and write to Delta Lake",
+      "notebook_task": {
+        "notebook_path": "/Users/flk.brauer@gmail.com/news-monitoring/rss_feeds",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "news_ingestion_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "notification_settings": {
+        "no_alert_for_skipped_runs": false,
+        "no_alert_for_canceled_runs": false,
+        "alert_on_last_attempt": false
+      }
+    }
+  ],
+  "schedule": {
+    "quartz_cron_expression": "0 0 2 * * ?",
+    "timezone_id": "UTC",
+    "pause_status": "UNPAUSED"
+  },
+  "format": "MULTI_TASK",
+  "queue": {
+    "enabled": true
+  },
+  "parameters": []
+}
