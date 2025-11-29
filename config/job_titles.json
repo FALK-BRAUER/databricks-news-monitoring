@@ -1,0 +1,69 @@
+{
+  "executive_tech_roles": [
+    "CTO",
+    "Chief Technology Officer",
+    "VP Engineering",
+    "VP of Engineering",
+    "Vice President Engineering",
+    "Head of Engineering",
+    "VP Product Engineering",
+    "VP Technology",
+    "Chief Architect",
+    "Director of Engineering",
+    "Engineering Director"
+  ],
+  "ai_ml_leadership": [
+    "VP AI",
+    "VP Machine Learning",
+    "VP AI/ML",
+    "Head of AI",
+    "Head of Machine Learning",
+    "Chief AI Officer",
+    "AI Director",
+    "ML Engineering Director"
+  ],
+  "solution_presales": [
+    "CTO Solution Advisor",
+    "Solution Architect",
+    "Principal Solution Architect",
+    "Solutions Advisor",
+    "Technical Solutions Architect",
+    "Presales Engineer",
+    "Presales Solution Architect",
+    "Sales Engineer",
+    "Principal Sales Engineer",
+    "Solutions Engineer",
+    "Technical Advisor"
+  ],
+  "target_regions": {
+    "europe": ["Germany", "Switzerland", "Austria", "Berlin", "Munich", "Zurich", "Vienna"],
+    "sea": ["Singapore", "Malaysia", "Indonesia", "Thailand", "Vietnam", "Philippines", "Hong Kong"],
+    "remote": ["Remote", "Worldwide", "Global"]
+  },
+  "search_queries": [
+    {
+      "title": "CTO",
+      "locations": ["Germany", "Switzerland", "Singapore", "Remote"]
+    },
+    {
+      "title": "VP Engineering",
+      "locations": ["Germany", "Switzerland", "Singapore", "Remote"]
+    },
+    {
+      "title": "Head of Engineering",
+      "locations": ["Germany", "Switzerland", "Singapore", "Remote"]
+    },
+    {
+      "title": "VP AI",
+      "locations": ["Germany", "Switzerland", "Singapore", "Remote"]
+    },
+    {
+      "title": "Solution Architect",
+      "locations": ["Germany", "Switzerland", "Singapore", "Remote"]
+    },
+    {
+      "title": "Presales Engineer",
+      "locations": ["Germany", "Switzerland", "Singapore", "Remote"]
+    }
+  ]
+}
