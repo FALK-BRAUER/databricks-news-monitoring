@@ -70,6 +70,14 @@ class AWSSecretsManager:
         """
         return self.get_secret_value('AWS', 'GITHUB')
 
+    def get_databricks_api_key(self) -> Optional[str]:
+        """Get the Databricks API key.
+
+        Returns:
+            Databricks API key or None
+        """
+        return self.get_secret_value('AWS', 'DATABRICKS_API_KEY')
+
     def get_api_key(self, api_name: str) -> Optional[str]:
         """Get an API key from secrets.
 
