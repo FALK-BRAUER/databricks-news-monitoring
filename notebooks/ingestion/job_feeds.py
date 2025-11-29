@@ -37,7 +37,7 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any
 from bs4 import BeautifulSoup
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, current_timestamp, lit
+from pyspark.sql.functions import col, current_timestamp, lit, desc
 from pyspark.sql.types import *
 
 print("✓ Libraries imported")
