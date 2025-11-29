@@ -13,7 +13,7 @@ aws:
 # Databricks Configuration
 databricks:
   # API key stored in AWS Secrets Manager under key: DATABRICKS_API_KEY
-  host: ""  # Set your Databricks workspace URL (e.g., https://adb-123456789.12.azuredatabricks.net)
+  host: "https://dbc-5a365369-15d1.cloud.databricks.com"
   api_key_secret: DATABRICKS_API_KEY
   cluster:
     spark_version: "13.3.x-scala2.12"
